@@ -1,6 +1,6 @@
 
 # This function constructs a table of GLMMs ordered from best to worst by AIC
-# It includes the AIC, dAIC, and marginal and conditional R^2 for each model.
+# It includes the AIC, dAIC, df, and marginal and conditional R^2 for each model.
 # The R^2 are calculated using methods from Nakagawa & Schielzeth 2013 and 
 # require the MuMIn package
 # Optionally, you can include a vector of names to use for the models instead 
@@ -25,7 +25,8 @@ AIC.R2.table <- function(..., mnames) {
     
     # Make an empty dataframe to hold the AIC/R^2 table
     tbl <- data.frame(Model = character(len), AIC = numeric(len), 
-        R2.marg = numeric(len), R2.cond = numeric(len), stringsAsFactors = F)
+        df = numeric(len), R2.marg = numeric(len), R2.cond = numeric(len), 
+        stringsAsFactors = F)
     
     # Calculate AIC and R^2 for each model
     for (i in 1:length(models)){
@@ -36,12 +37,15 @@ AIC.R2.table <- function(..., mnames) {
         # Store the AIC
         tbl$AIC[i] <- AIC(models[[i]])
         
+        # Store the degrees of freedom
+        tbl$df[i] <- attr(logLik(models[[i]]), "df") 
+        
         # Get the marginal and conditional R^2 using MuMIn
         R2 <- MuMIn::r.squaredGLMM(models[[i]])
         
         # Store the marginal and conditional R^2
-        tbl$R2.marg[i] <- round(R2[1], 2)
-        tbl$R2.cond[i] <- round(R2[2], 2)
+        tbl$R2.marg[i] <- round(R2[1], 3)
+        tbl$R2.cond[i] <- round(R2[2], 3)
     }
     
     # Clean up the table using some dplyr
@@ -54,7 +58,7 @@ AIC.R2.table <- function(..., mnames) {
         mutate(dAIC = round(AIC - min(AIC), 2)) %>%
         
         # Reorder the columns
-        select(Model, AIC, dAIC, R2.marg, R2.cond)
+        select(Model, AIC, dAIC, df, R2.marg, R2.cond)
     
     # Return the table
     return(tbl)
