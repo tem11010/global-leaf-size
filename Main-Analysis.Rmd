@@ -1,0 +1,189 @@
+---
+title: "Analysis Template"
+author: ""
+output: 
+  html_document: 
+    keep_md: yes
+    theme: readable
+  html_notebook: 
+    theme: readable
+graphics: yes
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include = F}
+# @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+# @@@@@ Knitr Options
+# @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+# Set root directory to the project directory
+knitr::opts_knit$set(root.dir = rprojroot::find_rstudio_root_file())
+
+
+# Set default knitr options: 
+# Suppress warnings and messages, cache chunks, 
+#  set default figure size to 6x8 at 300 dpi, and save a png and pdf
+knitr::opts_chunk$set(warning = F, message = F, collapse = T, cache = F,
+    fig.height = 6, fig.width = 8, dpi = 300, # 6x8" @ 300dpi:1800x2400=4.3MP
+    dev = c('png', 'pdf'), dev.args = list(pdf = list(onefile = F)))
+
+```
+
+
+
+### Overview
+
+In a break from Wright et al., we used the more recent approach to calulating R^2^ for mixed model from [Nakagawa & Schielzeth 2013](http://dx.doi.org/10.1111/j.2041-210x.2012.00261.x) as implemented in the [MuMIn](https://cran.r-project.org/web/packages/MuMIn/index.html) package.
+
+The Nakagawa and Shielzeth method calculates a marginal R^2^ that shows the proportion of variation attributable to fixed effects only (analagous to those reported by Wright et al.), and also a conditional R^2^ that shows the total variation explained by the model (both fixed and random effects)
+
+
+
+```{r 'Main_Code', include = F, cache = F}
+
+# @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+# @@@@@ Setup - This code is run, but output is hidden
+# @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+# Load Packages
+require(tidyverse) # Needed for data wrangling
+require(ggplot2)
+require(dplyr)
+require(cowplot) # Needed for publication-quality ggplots
+require(readxl)
+require(lme4)
+require(MuMIn)
+require(knitr)
+
+source("AIC.R2.table.R")
+
+
+# Import dataset
+
+# Specify the Science URL for the Wright et al. dataset
+dataURL <- "http://science.sciencemag.org/highwire/filestream/698792/field_highwire_adjunct_files/1/aal4760-Wright-SM_Data_Set_S1.xlsx"
+
+# Download the xlsx dataset and read into R
+tmpfile <- tempfile(fileext = ".xlsx")
+download.file(dataURL, tmpfile, mode = "wb")
+data <- read_excel(path = tmpfile, sheet = "Global leaf size dataset")
+
+
+```
+
+
+```{r 'Data_Wrangling', comment = ""}
+
+# Clean up the dataset
+global <- data %>% 
+    
+    # Select columns: family, species, site, size, latitude, & climate variables
+    select(Family, Species = `Genus species`, Site = `Site name`, 
+        Leaf.size = `Leaf size (cm2)`, Latitude, MAT, MAP, MIann, 
+        Tgs, RADann) %>%
+    
+    # First filter out all rows without a leaf size
+    filter(!is.na(Leaf.size))
+
+# Show dataset structure
+#str(global)
+
+
+```
+
+
+
+```{r 'RandomModels', comment = ""}
+
+##### Random Effect Models ##### 
+
+# Model with Site + Species random effects
+sitesp <- lmer(log10(Leaf.size) ~ (1|Site) + (1|Species), data = global)
+
+# Model with Family random effect
+family <- lmer(log10(Leaf.size) ~ (1|Family), data = global)
+
+# Model with Site + Family + Species random effects
+sitefamilysp <- lmer(log10(Leaf.size) ~ (1|Site) + (1|Family) + (1|Species), 
+    data = global)
+
+
+```
+
+## Latitude
+
+The best model for explaining latitudinal gradients in leaf size includes Site, Species, and Family as random effects.  Models with family alone outperform models that include Latitude without random effects. In the model used by Wright et al., with species and site as random effects, most of the variance was explained by these random effects, rather than latitude.  
+
+```{r 'LatitudeModels'}
+
+##### Latitude Models ##### 
+
+# Full Wright et al. model: Latitude + Site + Species
+lat.m1 <- lmer(log10(Leaf.size) ~ poly(Latitude, 2, raw = TRUE) + 
+    (1|Site) + (1|Species), data = global)
+
+# Full Wright et al model with Family: Latitude + Site + Family + Species
+lat.m2 <- lmer(log10(Leaf.size) ~ poly(Latitude, 2, raw  = TRUE) + 
+    (1|Site) + (1|Family) + (1|Species), data = global)
+
+# Model with only Latitude: no random effects
+lat.m3 <- lm(log10(Leaf.size) ~ poly(Latitude, 2, raw  = TRUE), data = global)
+
+# Make a table with AIC and Marginal and Conditional R2
+lat.tbl <- AIC.R2.table(lat.m1, lat.m2, lat.m3, sitesp, family, sitefamilysp, 
+    mnames = c("Latitude + Species + Site (Wright)", 
+        "Latitude + Site + Family + Species", "Latitude", "Site + Species", 
+       "Family", "Site + Family + Species"))
+
+kable(lat.tbl, format = "markdown")
+
+```
+
+## MAP
+
+```{r 'MAPModels'}
+
+
+##### MAP Models ##### 
+
+# Full Wright et al. model: MAP + Site + Species
+map.m1 <- lmer(log10(Leaf.size) ~ MAP + 
+    (1|Site) + (1|Species), data = global)
+
+# Full Wright et al model with Family: MAP + Site + Family + Species
+map.m2 <- lmer(log10(Leaf.size) ~ MAP + 
+    (1|Site) + (1|Family) + (1|Species), data = global)
+
+# Model with only MAP: no random effects
+map.m3 <- lm(log10(Leaf.size) ~ MAP, data = global)
+
+MAT.tbl <- AIC.R2.table(map.m1, map.m2, map.m3, sitesp, family, sitefamilysp, 
+    mnames = c("MAP + Species + Site (Wright)", 
+        "MAP + Site + Family + Species", "MAP", "Site + Species", 
+       "Family", "Site + Family + Species"))
+
+kable(MAT.tbl, format = "markdown")
+
+```
+
+
+
+```{r 'Graph_name'}
+
+# Put each graph in a separate code block with a different name
+
+```
+
+
+### Session Information
+
+```{r 'Session_Info', echo = F, comment = ""}
+
+# Add session information to help with reproduceability
+sessionInfo()
+
+
+```
+
+
