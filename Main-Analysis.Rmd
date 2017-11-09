@@ -39,13 +39,9 @@ In a break from Wright et al., we used the more recent approach to calulating R^
 The Nakagawa and Shielzeth method calculates a marginal R^2^ that shows the proportion of variation attributable to fixed effects only (analagous to those reported by Wright et al.), and also a conditional R^2^ that shows the total variation explained by the model (both fixed and random effects)
 
 
-```{r 'Main_Code', include = F, cache = F}
+```{r 'Setup_Code', cache = F}
 
-# @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-# @@@@@ Setup - This code is run, but output is hidden
-# @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-
-# Load Packages
+### Load Packages
 require(ggplot2) # Needed for plotting
 require(cowplot) # Needed for publication-quality ggplots
 require(dplyr) # Needed for data wrangling
@@ -55,10 +51,10 @@ require(MuMIn) # Needed for R^2 calculation
 require(knitr) # Needed to print out tables
 
 
-# Import a function to make a nice table with AIC and R^2
+### Import a function to make a nice table with AIC and R^2
 source("AIC.R2.table.R")
 
-# Import dataset
+### Import the Wright et al. dataset
 
 # Specify the Science URL for the Wright et al. dataset
 # NOTE: if this doesn't work, use read_excel() to import the dataset directly.
@@ -83,7 +79,7 @@ global <- data %>%
         Leaf.size = `Leaf size (cm2)`, Latitude, MAT, MAP, MIann, 
         Tgs, RADann) %>%
     
-    # First filter out all rows without a leaf size
+    # Filter out all rows without a leaf size
     filter(!is.na(Leaf.size))
 
 # Show dataset structure
