@@ -24,9 +24,9 @@ knitr::opts_knit$set(root.dir = rprojroot::find_rstudio_root_file())
 # Set default knitr options: 
 # Suppress warnings and messages, cache chunks, 
 #  set default figure size to 6x8 at 300 dpi, and save a png and pdf
-knitr::opts_chunk$set(warning = F, message = F, collapse = T, cache = F,
+knitr::opts_chunk$set(warning = F, message = F, collapse = T, cache = T,
     fig.height = 6, fig.width = 8, dpi = 300, # 6x8" @ 300dpi:1800x2400=4.3MP
-    dev = c('png', 'pdf'), dev.args = list(pdf = list(onefile = F)))
+    dev = 'png')
 
 ```
 
@@ -39,7 +39,6 @@ In a break from Wright et al., we used the more recent approach to calulating R^
 The Nakagawa and Shielzeth method calculates a marginal R^2^ that shows the proportion of variation attributable to fixed effects only (analagous to those reported by Wright et al.), and also a conditional R^2^ that shows the total variation explained by the model (both fixed and random effects)
 
 
-
 ```{r 'Main_Code', include = F, cache = F}
 
 # @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
@@ -47,21 +46,22 @@ The Nakagawa and Shielzeth method calculates a marginal R^2^ that shows the prop
 # @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
 # Load Packages
-require(tidyverse) # Needed for data wrangling
-require(ggplot2)
-require(dplyr)
+require(ggplot2) # Needed for plotting
 require(cowplot) # Needed for publication-quality ggplots
-require(readxl)
-require(lme4)
-require(MuMIn)
-require(knitr)
+require(dplyr) # Needed for data wrangling
+require(readxl) # Needed to read in the Excel file
+require(lme4) # Needed for mixed modelling
+require(MuMIn) # Needed for R^2 calculation
+require(knitr) # Needed to print out tables
 
+
+# Import a function to make a nice table with AIC and R^2
 source("AIC.R2.table.R")
-
 
 # Import dataset
 
 # Specify the Science URL for the Wright et al. dataset
+# NOTE: if this doesn't work, use read_excel() to import the dataset directly.
 dataURL <- "http://science.sciencemag.org/highwire/filestream/698792/field_highwire_adjunct_files/1/aal4760-Wright-SM_Data_Set_S1.xlsx"
 
 # Download the xlsx dataset and read into R
@@ -73,7 +73,7 @@ data <- read_excel(path = tmpfile, sheet = "Global leaf size dataset")
 ```
 
 
-```{r 'Data_Wrangling', comment = ""}
+```{r 'Data_Wrangling'}
 
 # Clean up the dataset
 global <- data %>% 
@@ -94,7 +94,7 @@ global <- data %>%
 
 
 
-```{r 'RandomModels', comment = ""}
+```{r 'RandomModels'}
 
 ##### Random Effect Models ##### 
 
@@ -130,12 +130,13 @@ lat.m2 <- lmer(log10(Leaf.size) ~ poly(Latitude, 2, raw  = TRUE) +
 # Model with only Latitude: no random effects
 lat.m3 <- lm(log10(Leaf.size) ~ poly(Latitude, 2, raw  = TRUE), data = global)
 
-# Make a table with AIC and Marginal and Conditional R2
+# Make a table with AIC and Marginal and Conditional R^2
 lat.tbl <- AIC.R2.table(lat.m1, lat.m2, lat.m3, sitesp, family, sitefamilysp, 
     mnames = c("Latitude + Species + Site (Wright)", 
         "Latitude + Site + Family + Species", "Latitude", "Site + Species", 
        "Family", "Site + Family + Species"))
 
+# Print out a markdown table
 kable(lat.tbl, format = "markdown")
 
 ```
@@ -158,11 +159,13 @@ map.m2 <- lmer(log10(Leaf.size) ~ MAP +
 # Model with only MAP: no random effects
 map.m3 <- lm(log10(Leaf.size) ~ MAP, data = global)
 
+# Make a table with AIC and Marginal and Conditional R^2
 MAT.tbl <- AIC.R2.table(map.m1, map.m2, map.m3, sitesp, family, sitefamilysp, 
     mnames = c("MAP + Species + Site (Wright)", 
         "MAP + Site + Family + Species", "MAP", "Site + Species", 
        "Family", "Site + Family + Species"))
 
+# Print out a markdown table
 kable(MAT.tbl, format = "markdown")
 
 ```
