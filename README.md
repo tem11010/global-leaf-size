@@ -3,11 +3,11 @@ This repository contains analyses conducted on a dataset obtained from [Wright e
 
 
 We present the results of generalized linear mixed effects models (GLMMs), run in R (using the ['lme4'](https://cran.r-project.org/web/packages/lme4/index.html) package),  examining the response of leaf size to latitude and global climates. 
-We demonstrate that taxonomic information captures a significant proportion of global variation in leaf size; even more than  do climatic variables.
+We demonstrate that taxonomic information captures a significant proportion of global variation in leaf size, capturing more variation than climatic variables.
 
 
 ## Analyses - [here](Main-Analysis.md)
-We generate GLMMs with Leaf Size (LS) as the response variable with different combinations of latitude and climatic variables as fixed effect (population-level effects), and site, species, and family as random effects (group-level effects).
+We generate GLMMs with Leaf Size (LS) as the response variable, with different combinations of latitude and climatic variables as fixed effect (population-level effects), and site, species, and family as random effects (group-level effects).
 
 We evaluate the model fit using [AIC](https://en.wikipedia.org/wiki/Akaike_information_criterion), a now widely used method of model selection.
 
