@@ -6,7 +6,7 @@ We present the results of generalized linear mixed effects models (GLMMs), run i
 We demonstrate that taxonomic information captures a significant proportion of global variation in leaf size; even more than  do climatic variables.
 
 
-## Analyses - [here](docs/Main-Analysis.md)
+## Analyses - [here](Main-Analysis.md)
 We generate GLMMs with Leaf Size (LS) as the response variable with different combinations of latitude and climatic variables as fixed effect (population-level effects), and site, species, and family as random effects (group-level effects).
 
 We evaluate the model fit using [AIC](https://en.wikipedia.org/wiki/Akaike_information_criterion), a now widely used method of model selection.
