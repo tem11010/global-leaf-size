@@ -11,4 +11,4 @@ We generate GLMMs with Leaf Size (LS) as the response variable with different co
 
 We evaluate the model fit using [AIC](https://en.wikipedia.org/wiki/Akaike_information_criterion), a now widely used method of model selection.
 
-We also calculate GLMM-based coefficients of determination (R<sup>2</sup>), using the R package ['MuMIn'](https://cran.r-project.org/web/packages/MuMIn/MuMIn.pdf], which uses the method of [Nakagawa and Schielzeth (2013)](http://onlinelibrary.wiley.com/doi/10.1111/j.2041-210x.2012.00261.x/full), and its extension by [Johnson (2014)](http://onlinelibrary.wiley.com/doi/10.1111/2041-210X.12225/full) 
+We also calculate GLMM-based coefficients of determination (R<sup>2</sup>), using the R package ['MuMIn'](https://cran.r-project.org/web/packages/MuMIn/MuMIn.pdf], which uses the method of [Nakagawa and Schielzeth (2013)](http://onlinelibrary.wiley.com/doi/10.1111/j.2041-210x.2012.00261.x/full), and its extension by [Johnson (2014)](http://onlinelibrary.wiley.com/doi/10.1111/2041-210X.12225/full). 
