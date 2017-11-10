@@ -9,6 +9,7 @@ output:
     theme: readable
 graphics: yes
 editor_options: 
+  
   chunk_output_type: console
 ---
 
