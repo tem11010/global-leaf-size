@@ -63,7 +63,7 @@ global <- data %>%
     # Select columns: family, species, site, size, latitude, & climate variables
     select(Family, Species = `Genus species`, Site = `Site name`, 
         Leaf.size = `Leaf size (cm2)`, Latitude, MAT, MAP, MIann, 
-        Tgs, RADann) %>%
+        Tgs, RADann, Compound_Simple) %>%
     
     # Filter out all rows without a leaf size
     filter(!is.na(Leaf.size))
@@ -337,12 +337,51 @@ kable(RAD.tbl, format = "markdown")
 |RAD                           | 35260.60| 19873.78|  3|   0.003|   0.003|
 
 
+## Plotting the data
+
+Let's recreate the plot in Wright et al (more or less)
+
 
 ```r
 
-# Put each graph in a separate code block with a different name
+#  Leaf Size ~ Latitude
 
+ggplot(data = global, aes(x = Latitude, y = log10(Leaf.size)))+
+        
+    
+    geom_point(pch = 1, aes(color = Compound_Simple), alpha = 0.7) + 
+    
+    scale_color_manual(values = c("darkorange", "darkorchid4")) + 
+    
+    geom_smooth(method = 'lm', formula = y ~ poly(x, 2), color = "black", se = F) + 
+    
+    ylab("Log[Leaf Size]") + 
+    
+    geom_quantile(quantiles  = c(0.05, 0.95),formula = y ~ poly(x, 2), lty = 2, color = "black")
 ```
+
+![](Main-Analysis_files/figure-html/Latitude Plot-1.png)<!-- -->
+
+
+Now let's plot Latitude against leaf size, but with separate lines for each family 
+(we'll use straight lines here, and take out the simple-compound coloring)
+
+
+
+```r
+
+# Leaf Size ~ Latitude by family
+
+ggplot(data = global, aes(x = Latitude, y = log10(Leaf.size)))+
+        
+    geom_point(pch = 1, alpha = 0.7) + 
+    
+    ylab("Log[Leaf Size]") + 
+    
+    geom_smooth(method = 'lm', formula = y~x, aes(group = Family), color = "black", se = F)
+```
+
+![](Main-Analysis_files/figure-html/Latitude Family Plot-1.png)<!-- -->
 
 
 ### Session Information
