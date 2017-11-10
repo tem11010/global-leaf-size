@@ -1,4 +1,4 @@
-## About this Repository
+## About
 This repository contains analyses conducted on a dataset obtained from [Wright et al (2017)](http://science.sciencemag.org/content/357/6354/917).
 
 
