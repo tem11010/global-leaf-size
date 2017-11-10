@@ -49,6 +49,7 @@ require(readxl) # Needed to read in the Excel file
 require(lme4) # Needed for mixed modelling
 require(MuMIn) # Needed for R^2 calculation
 require(knitr) # Needed to print out tables
+require(readxl) # Needed to read in excel files
 
 
 ### Import a function to make a nice table with AIC and R^2
@@ -166,6 +167,124 @@ kable(MAT.tbl, format = "markdown")
 
 ```
 
+
+## MAT
+
+```{r 'MATModels'}
+
+
+##### MAT Models ##### 
+
+# Full Wright et al. model: MAT + Site + Species
+mat.m1 <- lmer(log10(Leaf.size) ~ MAT + 
+    (1|Site) + (1|Species), data = global)
+
+# Full Wright et al model with Family: MAT + Site + Family + Species
+mat.m2 <- lmer(log10(Leaf.size) ~ MAT + 
+    (1|Site) + (1|Family) + (1|Species), data = global)
+
+# Model with only MAT: no random effects
+mat.m3 <- lm(log10(Leaf.size) ~ MAT, data = global)
+
+# Make a table with AIC and Marginal and Conditional R^2
+MAT.tbl <- AIC.R2.table(mat.m1, mat.m2, mat.m3, sitesp, family, sitefamilysp, 
+    mnames = c("MAT + Species + Site (Wright)", 
+        "MAT + Site + Family + Species", "MAT", "Site + Species", 
+       "Family", "Site + Family + Species"))
+
+# Print out a markdown table
+kable(MAT.tbl, format = "markdown")
+
+```
+
+
+## MI
+
+```{r 'MIModels'}
+
+
+##### MI Models ##### 
+
+# Full Wright et al. model: MI + Site + Species
+mi.m1 <- lmer(log10(Leaf.size) ~ MIann + 
+    (1|Site) + (1|Species), data = global)
+
+# Full Wright et al model with Family: MI + Site + Family + Species
+mi.m2 <- lmer(log10(Leaf.size) ~ MIann + 
+    (1|Site) + (1|Family) + (1|Species), data = global)
+
+# Model with only MI: no random effects
+mi.m3 <- lm(log10(Leaf.size) ~ MIann, data = global)
+
+# Make a table with AIC and Marginal and Conditional R^2
+MI.tbl <- AIC.R2.table(mi.m1, mi.m2, mi.m3, sitesp, family, sitefamilysp, 
+    mnames = c("MI + Species + Site (Wright)", 
+        "MI + Site + Family + Species", "MI", "Site + Species", 
+       "Family", "Site + Family + Species"))
+
+# Print out a markdown table
+kable(MI.tbl, format = "markdown")
+
+```
+
+## TGS
+
+```{r 'TGSModels'}
+
+
+##### TGS Models ##### 
+
+# Full Wright et al. model: TGS + Site + Species
+tgs.m1 <- lmer(log10(Leaf.size) ~ Tgs + 
+    (1|Site) + (1|Species), data = global)
+
+# Full Wright et al model with Family: TGS + Site + Family + Species
+tgs.m2 <- lmer(log10(Leaf.size) ~ Tgs + 
+    (1|Site) + (1|Family) + (1|Species), data = global)
+
+# Model with only TGS: no random effects
+tgs.m3 <- lm(log10(Leaf.size) ~ Tgs, data = global)
+
+# Make a table with AIC and Marginal and Conditional R^2
+TGS.tbl <- AIC.R2.table(tgs.m1, tgs.m2, tgs.m3, sitesp, family, sitefamilysp, 
+    mnames = c("TGS + Species + Site (Wright)", 
+        "TGS + Site + Family + Species", "TGS", "Site + Species", 
+       "Family", "Site + Family + Species"))
+
+# Print out a markdown table
+kable(TGS.tbl, format = "markdown")
+
+```
+
+
+## RAD
+
+```{r 'RADModels'}
+
+
+##### RAD Models ##### 
+
+# Full Wright et al. model: RAD + Site + Species
+rad.m1 <- lmer(log10(Leaf.size) ~ RADann + 
+    (1|Site) + (1|Species), data = global)
+
+# Full Wright et al model with Family: RAD + Site + Family + Species
+rad.m2 <- lmer(log10(Leaf.size) ~ RADann + 
+    (1|Site) + (1|Family) + (1|Species), data = global)
+
+# Model with only RAD: no random effects
+rad.m3 <- lm(log10(Leaf.size) ~ RADann, data = global)
+
+# Make a table with AIC and Marginal and Conditional R^2
+RAD.tbl <- AIC.R2.table(rad.m1, rad.m2, rad.m3, sitesp, family, sitefamilysp, 
+    mnames = c("RAD + Species + Site (Wright)", 
+        "RAD + Site + Family + Species", "RAD", "Site + Species", 
+       "Family", "Site + Family + Species"))
+
+# Print out a markdown table
+kable(RAD.tbl, format = "markdown")
+
+```
 
 
 ```{r 'Graph_name'}
