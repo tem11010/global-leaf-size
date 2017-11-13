@@ -1,15 +1,12 @@
 ---
-title: "Analysis Template"
+title: "Main Analysis"
 author: ""
 output: 
   html_document: 
     keep_md: yes
     theme: readable
-  html_notebook: 
-    theme: readable
 graphics: yes
 editor_options: 
-  
   chunk_output_type: inline
 ---
 
