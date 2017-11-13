@@ -32,9 +32,9 @@ knitr::opts_chunk$set(warning = F, message = F, collapse = T, cache = T,
 
 ### Overview
 
-In a break from Wright et al., we used the more recent approach to calulating R^2^ for mixed model from [Nakagawa & Schielzeth 2013](http://dx.doi.org/10.1111/j.2041-210x.2012.00261.x) as implemented in the [MuMIn](https://cran.r-project.org/web/packages/MuMIn/index.html) package.
+In a break from Wright et al., we used the more recent approach to calulating R<sup>2</sup> for mixed model from [Nakagawa & Schielzeth 2013](http://dx.doi.org/10.1111/j.2041-210x.2012.00261.x) as implemented in the [MuMIn](https://cran.r-project.org/web/packages/MuMIn/index.html) package.
 
-The Nakagawa and Shielzeth method calculates a marginal R^2^ that shows the proportion of variation attributable to fixed effects only (analagous to those reported by Wright et al.), and also a conditional R^2^ that shows the total variation explained by the model (both fixed and random effects)
+The Nakagawa and Shielzeth method calculates a marginal R<sup>2</sup> that shows the proportion of variation attributable to fixed effects only (analagous to those reported by Wright et al.), and also a conditional R<sup>2</sup> that shows the total variation explained by the model (both fixed and random effects)
 
 
 ```{r 'Setup_Code', cache = F}
@@ -289,7 +289,7 @@ kable(RAD.tbl, format = "markdown")
 
 Let's recreate the plot in Wright et al (more or less)
 
-```{r 'Latitude Plot'}
+```{r 'Latitude_Plot'}
 
 #  Leaf Size ~ Latitude
 
@@ -313,7 +313,7 @@ Now let's plot Latitude against leaf size, but with separate lines for each fami
 (we'll use straight lines here, and take out the simple-compound coloring)
 
 
-```{r 'Latitude Family Plot'}
+```{r 'Latitude_Family_Plot'}
 
 # Leaf Size ~ Latitude by family
 

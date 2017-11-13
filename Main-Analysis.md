@@ -1,11 +1,15 @@
 # Main Analysis
+  
+
+
+
 
 
 ### Overview
 
-In a break from Wright et al., we used the more recent approach to calulating R^2^ for mixed model from [Nakagawa & Schielzeth 2013](http://dx.doi.org/10.1111/j.2041-210x.2012.00261.x) as implemented in the [MuMIn](https://cran.r-project.org/web/packages/MuMIn/index.html) package.
+In a break from Wright et al., we used the more recent approach to calulating R<sup>2</sup> for mixed model from [Nakagawa & Schielzeth 2013](http://dx.doi.org/10.1111/j.2041-210x.2012.00261.x) as implemented in the [MuMIn](https://cran.r-project.org/web/packages/MuMIn/index.html) package.
 
-The Nakagawa and Shielzeth method calculates a marginal R^2^ that shows the proportion of variation attributable to fixed effects only (analagous to those reported by Wright et al.), and also a conditional R^2^ that shows the total variation explained by the model (both fixed and random effects)
+The Nakagawa and Shielzeth method calculates a marginal R<sup>2</sup> that shows the proportion of variation attributable to fixed effects only (analagous to those reported by Wright et al.), and also a conditional R<sup>2</sup> that shows the total variation explained by the model (both fixed and random effects)
 
 
 
@@ -345,7 +349,7 @@ ggplot(data = global, aes(x = Latitude, y = log10(Leaf.size)))+
     geom_quantile(quantiles  = c(0.05, 0.95),formula = y ~ poly(x, 2), lty = 2, color = "black")
 ```
 
-![](Main-Analysis_files/figure-html/Latitude Plot-1.png)<!-- -->
+![](Main-Analysis_files/figure-html/Latitude_Plot-1.png)<!-- -->
 
 
 Now let's plot Latitude against leaf size, but with separate lines for each family 
@@ -366,7 +370,7 @@ ggplot(data = global, aes(x = Latitude, y = log10(Leaf.size)))+
     geom_smooth(method = 'lm', formula = y~x, aes(group = Family), color = "black", se = F)
 ```
 
-![](Main-Analysis_files/figure-html/Latitude Family Plot-1.png)<!-- -->
+![](Main-Analysis_files/figure-html/Latitude_Family_Plot-1.png)<!-- -->
 
 
 ### Session Information
