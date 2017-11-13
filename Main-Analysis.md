@@ -10,7 +10,7 @@ output:
 graphics: yes
 editor_options: 
   
-  chunk_output_type: console
+  chunk_output_type: inline
 ---
 
 
