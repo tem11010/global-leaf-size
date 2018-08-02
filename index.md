@@ -14,7 +14,7 @@ editor_options:
 
 
 ## Introduction
-This post was originally written as a response to [Wright et al](http://science.sciencemag.org/content/357/6354/917, "Wright et al"), and is supplemental to the [eLetter](http://science.sciencemag.org/content/357/6354/917/tab-e-letters "eLetter") we wrote in response to that acticle. 
+This post was originally written as a response to [Wright et al., 2017](science.sciencemag.org/content/357/6354/917, "Wright et al., 2017"), and is supplemental to the [eLetter](http://science.sciencemag.org/content/357/6354/917/tab-e-letters "eLetter") we wrote in response to that acticle. 
 
 
 ### Overview
@@ -383,6 +383,11 @@ ggplot(data = global, aes(x = Latitude, y = log10(Leaf.size)))+
 ```
 
 ![](index_files/figure-html/Latitude_Family_Plot-1.png)<!-- -->
+
+### References
+Wright IJ,  Dong N, Maire V, Prentice IC, Westoby M, Díaz S, Gallagher R. 2017. **Global climatic drivers of leaf size**. _Science_, 357, 917-921. DOI: 10.1126/science.aal4760
+  
+
 
 
 ### Session Information
