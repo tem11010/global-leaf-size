@@ -14,7 +14,7 @@ editor_options:
 
 
 ## Introduction
-This post was originaly written as a response to [Wright et al](http://science.sciencemag.org/content/357/6354/917, "Wright et al"), and is supplemental to the [eLetter](http://science.sciencemag.org/content/357/6354/917/tab-e-letters "eLetter") we wrote in response to that acticle. 
+This post was originally written as a response to [Wright et al](http://science.sciencemag.org/content/357/6354/917, "Wright et al"), and is supplemental to the [eLetter](http://science.sciencemag.org/content/357/6354/917/tab-e-letters "eLetter") we wrote in response to that acticle. 
 
 
 ### Overview
