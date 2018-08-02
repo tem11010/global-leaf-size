@@ -11,22 +11,7 @@ editor_options:
   chunk_output_type: console
 ---
 
-```{r setup, include = F}
-# @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-# @@@@@ Knitr Options
-# @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
-# Set root directory to the project directory
-knitr::opts_knit$set(root.dir = rprojroot::find_rstudio_root_file())
-
-# Set default knitr options: 
-# Suppress warnings and messages, cache chunks, 
-#  set default figure size to 6x8 at 300 dpi, and save a png and pdf
-knitr::opts_chunk$set(warning = F, message = F, collapse = T, cache = T,
-    fig.height = 6, fig.width = 8, dpi = 120,  
-    dev = 'png')
-
-```
 
 ## Introduction
 This post was originaly written as a response to [Wright et al](http://science.sciencemag.org/content/357/6354/917, "Wright et al"), and is supplemental to the [eLetter](http://science.sciencemag.org/content/357/6354/917/tab-e-letters "eLetter") we wrote in response to that acticle. 
@@ -39,7 +24,8 @@ In a break from Wright et al., we used the more recent approach to calulating R<
 The Nakagawa and Shielzeth method calculates a marginal R<sup>2</sup> that shows the proportion of variation attributable to fixed effects only (analagous to those reported by Wright et al.), and also a conditional R<sup>2</sup> that shows the total variation explained by the model (both fixed and random effects)
 
 
-```{r 'Setup_Code', cache = F}
+
+```r
 
 ### Load Packages
 require(ggplot2) # Needed for plotting
@@ -66,11 +52,11 @@ tmpfile <- tempfile(fileext = ".xlsx")
 download.file(dataURL, tmpfile, mode = "wb")
 data <- read_excel(path = tmpfile, sheet = "Global leaf size dataset")
 
-
 ```
 
 
-```{r 'Data_Wrangling'}
+
+```r
 
 # Clean up the dataset
 global <- data %>% 
@@ -86,12 +72,12 @@ global <- data %>%
 # Show dataset structure
 #str(global)
 
-
 ```
 
 
 
-```{r 'RandomModels'}
+
+```r
 
 ##### Random Effect Models ##### 
 
@@ -105,14 +91,14 @@ family <- lmer(log10(Leaf.size) ~ (1|Family), data = global)
 sitefamilysp <- lmer(log10(Leaf.size) ~ (1|Site) + (1|Family) + (1|Species), 
     data = global)
 
-
 ```
 
 ## Latitude
 
 The best model for explaining latitudinal gradients in leaf size includes Site, Species, and Family as random effects.  Models with family alone outperform models that include Latitude without random effects. In the model used by Wright et al., with species and site as random effects, most of the variance was explained by these random effects, rather than latitude.  
 
-```{r 'LatitudeModels'}
+
+```r
 
 ##### Latitude Models ##### 
 
@@ -135,12 +121,23 @@ lat.tbl <- AIC.R2.table(lat.m1, lat.m2, lat.m3, sitesp, family, sitefamilysp,
 
 # Print out a markdown table
 kable(lat.tbl, format = "markdown")
-
 ```
+
+
+
+|Model                              |      AIC|     dAIC| df| R2.marg| R2.cond|
+|:----------------------------------|--------:|--------:|--:|-------:|-------:|
+|Latitude + Site + Family + Species | 14986.72|     0.00|  7|   0.171|   0.948|
+|Site + Family + Species            | 15386.82|   400.10|  5|   0.000|   0.947|
+|Latitude + Species + Site (Wright) | 16538.27|  1551.54|  6|   0.231|   0.945|
+|Site + Species                     | 16948.59|  1961.87|  4|   0.000|   0.945|
+|Family                             | 29081.79| 14095.06|  3|   0.000|   0.481|
+|Latitude                           | 30835.92| 15849.20|  4|   0.282|   0.282|
 
 ## MAP
 
-```{r 'MAPModels'}
+
+```r
 
 
 ##### MAP Models ##### 
@@ -164,13 +161,24 @@ MAT.tbl <- AIC.R2.table(map.m1, map.m2, map.m3, sitesp, family, sitefamilysp,
 
 # Print out a markdown table
 kable(MAT.tbl, format = "markdown")
-
 ```
+
+
+
+|Model                         |      AIC|     dAIC| df| R2.marg| R2.cond|
+|:-----------------------------|--------:|--------:|--:|-------:|-------:|
+|MAP + Site + Family + Species | 15305.31|     0.00|  6|   0.051|   0.947|
+|Site + Family + Species       | 15386.82|    81.51|  5|   0.000|   0.947|
+|MAP + Species + Site (Wright) | 16859.78|  1554.46|  5|   0.076|   0.945|
+|Site + Species                | 16948.59|  1643.28|  4|   0.000|   0.945|
+|Family                        | 29081.79| 13776.47|  3|   0.000|   0.481|
+|MAP                           | 33228.50| 17923.18|  3|   0.142|   0.142|
 
 
 ## MAT
 
-```{r 'MATModels'}
+
+```r
 
 
 ##### MAT Models ##### 
@@ -194,13 +202,24 @@ MAT.tbl <- AIC.R2.table(mat.m1, mat.m2, mat.m3, sitesp, family, sitefamilysp,
 
 # Print out a markdown table
 kable(MAT.tbl, format = "markdown")
-
 ```
+
+
+
+|Model                         |      AIC|     dAIC| df| R2.marg| R2.cond|
+|:-----------------------------|--------:|--------:|--:|-------:|-------:|
+|MAT + Site + Family + Species | 15216.39|     0.00|  6|   0.075|   0.947|
+|Site + Family + Species       | 15386.82|   170.43|  5|   0.000|   0.947|
+|MAT + Species + Site (Wright) | 16751.16|  1534.76|  5|   0.112|   0.944|
+|Site + Species                | 16948.59|  1732.20|  4|   0.000|   0.945|
+|Family                        | 29081.79| 13865.39|  3|   0.000|   0.481|
+|MAT                           | 33029.21| 17812.81|  3|   0.155|   0.155|
 
 
 ## MI
 
-```{r 'MIModels'}
+
+```r
 
 
 ##### MI Models ##### 
@@ -224,12 +243,23 @@ MI.tbl <- AIC.R2.table(mi.m1, mi.m2, mi.m3, sitesp, family, sitefamilysp,
 
 # Print out a markdown table
 kable(MI.tbl, format = "markdown")
-
 ```
+
+
+
+|Model                        |      AIC|     dAIC| df| R2.marg| R2.cond|
+|:----------------------------|--------:|--------:|--:|-------:|-------:|
+|Site + Family + Species      | 15386.82|     0.00|  5|   0.000|   0.947|
+|MI + Site + Family + Species | 15391.32|     4.50|  6|   0.002|   0.947|
+|Site + Species               | 16948.59|  1561.77|  4|   0.000|   0.945|
+|MI + Species + Site (Wright) | 16952.43|  1565.60|  5|   0.003|   0.945|
+|Family                       | 29081.79| 13694.97|  3|   0.000|   0.481|
+|MI                           | 35029.96| 19643.14|  3|   0.020|   0.020|
 
 ## TGS
 
-```{r 'TGSModels'}
+
+```r
 
 
 ##### TGS Models ##### 
@@ -253,13 +283,24 @@ TGS.tbl <- AIC.R2.table(tgs.m1, tgs.m2, tgs.m3, sitesp, family, sitefamilysp,
 
 # Print out a markdown table
 kable(TGS.tbl, format = "markdown")
-
 ```
+
+
+
+|Model                         |      AIC|     dAIC| df| R2.marg| R2.cond|
+|:-----------------------------|--------:|--------:|--:|-------:|-------:|
+|TGS + Site + Family + Species | 15089.07|     0.00|  6|   0.120|   0.947|
+|Site + Family + Species       | 15386.82|   297.76|  5|   0.000|   0.947|
+|TGS + Species + Site (Wright) | 16620.02|  1530.96|  5|   0.172|   0.944|
+|Site + Species                | 16948.59|  1859.52|  4|   0.000|   0.945|
+|Family                        | 29081.79| 13992.72|  3|   0.000|   0.481|
+|TGS                           | 32060.89| 16971.82|  3|   0.214|   0.214|
 
 
 ## RAD
 
-```{r 'RADModels'}
+
+```r
 
 
 ##### RAD Models ##### 
@@ -283,15 +324,26 @@ RAD.tbl <- AIC.R2.table(rad.m1, rad.m2, rad.m3, sitesp, family, sitefamilysp,
 
 # Print out a markdown table
 kable(RAD.tbl, format = "markdown")
-
 ```
+
+
+
+|Model                         |      AIC|     dAIC| df| R2.marg| R2.cond|
+|:-----------------------------|--------:|--------:|--:|-------:|-------:|
+|Site + Family + Species       | 15386.82|     0.00|  5|   0.000|   0.947|
+|RAD + Site + Family + Species | 15395.92|     9.10|  6|   0.003|   0.947|
+|Site + Species                | 16948.59|  1561.77|  4|   0.000|   0.945|
+|RAD + Species + Site (Wright) | 16953.90|  1567.08|  5|   0.006|   0.945|
+|Family                        | 29081.79| 13694.97|  3|   0.000|   0.481|
+|RAD                           | 35260.60| 19873.78|  3|   0.003|   0.003|
 
 
 ## Plotting the data
 
 Let's recreate the plot in Wright et al (more or less)
 
-```{r 'Latitude_Plot'}
+
+```r
 
 #  Leaf Size ~ Latitude
 
@@ -307,15 +359,17 @@ ggplot(data = global, aes(x = Latitude, y = log10(Leaf.size)))+
     ylab("Log[Leaf Size]") + 
     
     geom_quantile(quantiles  = c(0.05, 0.95),formula = y ~ poly(x, 2), lty = 2, color = "black")
-    
 ```
+
+![](index_files/figure-html/Latitude_Plot-1.png)<!-- -->
 
 
 Now let's plot Latitude against leaf size, but with separate lines for each family 
 (we'll use straight lines here, and take out the simple-compound coloring)
 
 
-```{r 'Latitude_Family_Plot'}
+
+```r
 
 # Leaf Size ~ Latitude by family
 
@@ -326,18 +380,49 @@ ggplot(data = global, aes(x = Latitude, y = log10(Leaf.size)))+
     ylab("Log[Leaf Size]") + 
     
     geom_smooth(method = 'lm', formula = y~x, aes(group = Family), color = "black", se = F)
-    
-
-    
 ```
+
+![](index_files/figure-html/Latitude_Family_Plot-1.png)<!-- -->
 
 
 ### Session Information
 
-```{r 'Session_Info', echo = F, comment = ""}
 
-# Add session information to help with reproduceability
-sessionInfo()
+```
+R version 3.4.2 (2017-09-28)
+Platform: x86_64-w64-mingw32/x64 (64-bit)
+Running under: Windows 7 x64 (build 7601) Service Pack 1
 
+Matrix products: default
 
+locale:
+[1] LC_COLLATE=English_United States.1252 
+[2] LC_CTYPE=English_United States.1252   
+[3] LC_MONETARY=English_United States.1252
+[4] LC_NUMERIC=C                          
+[5] LC_TIME=English_United States.1252    
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+other attached packages:
+ [1] quantreg_5.33 SparseM_1.77  bindrcpp_0.2  knitr_1.20    MuMIn_1.40.0 
+ [6] lme4_1.1-17   Matrix_1.2-11 readxl_1.0.0  dplyr_0.7.4   cowplot_0.7.0
+[11] ggplot2_2.2.1
+
+loaded via a namespace (and not attached):
+ [1] Rcpp_0.12.17       highr_0.6          nloptr_1.0.4      
+ [4] pillar_1.1.0       compiler_3.4.2     cellranger_1.1.0  
+ [7] plyr_1.8.4         bindr_0.1          prettydoc_0.2.1   
+[10] tools_3.4.2        digest_0.6.15      evaluate_0.10     
+[13] tibble_1.4.2       gtable_0.2.0       nlme_3.1-131      
+[16] lattice_0.20-35    pkgconfig_2.0.1    rlang_0.2.0       
+[19] yaml_2.1.19        stringr_1.3.0      MatrixModels_0.4-1
+[22] stats4_3.4.2       rprojroot_1.2      grid_3.4.2        
+[25] glue_1.2.0         R6_2.2.1           rmarkdown_1.9     
+[28] minqa_1.2.4        magrittr_1.5       codetools_0.2-15  
+[31] backports_1.1.2    scales_0.5.0       htmltools_0.3.6   
+[34] splines_3.4.2      MASS_7.3-50        assertthat_0.2.0  
+[37] colorspace_1.3-2   labeling_0.3       stringi_1.1.7     
+[40] lazyeval_0.2.1     munsell_0.4.3     
 ```
