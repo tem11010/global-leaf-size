@@ -1,5 +1,5 @@
 ---
-title: "Time Series in R using INLA"
+title: "Global leaf size analysis"
 author: "Timothy E. Moore & James G. Mickley"
 graphics: yes
 output:
